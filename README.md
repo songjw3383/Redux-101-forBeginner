@@ -104,3 +104,16 @@ const handleMinus = () => {
 add.addEventListener("click", handleAdd);
 minus.addEventListener("click", handleMinus);
 ```
+### 2. PURE REDUX: TO DO LIST
+1. toDo 기능을 vanilaJS로 구현해보고, Redux로 구현하기위해 셋업을 해준다
+> store, action, dispatch 등등..
+2. State Mutation 에 대해
+
+* Redux 의 3 Principles
+1.) state는 read-only!
+> store를 수정할 수 있는 유일한 방법은 action을 보내는 방법뿐.
+2.) state를 mutate하지 말아야 한다.
+> state를 mutating하는 대신에 새로운 state objects를 리턴 해야한다.
+** Mutation? **
+- 기존에 state에서 추가시켜 반환하는것이아닌, 새로운 state를 만들고 그 새로운 state를 리턴해야한다!
+
