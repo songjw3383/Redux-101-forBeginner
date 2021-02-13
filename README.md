@@ -132,3 +132,23 @@ minus.addEventListener("click", handleMinus);
 5) toDo의 변화에 맞게 리스트를 repainting 하였다.
 > repaint한 방법은 새로운 todo가 생기면 리스트의 전체를 비우고 state에 있는 각각의 toDo들을 이용해서 다시 새로운 리스트를 만들었다.
 6) dispatchDeleteToDo 는 action creator를 사용해 action을 dispatch
+
+### 3. React Redux
+* React를 사용하여 구현하기 위한 setup
+> index.js / App.js / index.html
+* npm add react-redux react-router-dom
+> home.js / detail.js 페이지 구현
+* src 폴더안에 store.js 만들기
+* subscribe 에 redux-react가 꼭 필요하다!
+> 변경사항이 있을때 모든게 다시 reder 되기를 원하기 때문
+* 또한 store를 index에 연결하기 위하여 코드를 수정하였다.
+```
+<index.js>
+...
+ReactDOM.render(
+    <Provider store={store}>
+        <App />
+    </Provider>,
+     document.getElementById("root")
+);
+```
