@@ -152,3 +152,11 @@ ReactDOM.render(
      document.getElementById("root")
 );
 ```
+* Connect()
+- components들을 store에 연결시켜주는 기능을 수행
+> import { connect } from "react-redux";
+- 2개의 인자를 받는다. -> state나 dispatch
+> getState는 state를 전달해줬고, dispatch는 store 혹은 reducer에 메세지를 전달해주는 기능을 했었다.
+- mapStateToProps() 함수로 Store의 state를 Home에다 가져오게 한다
+1. state -> Redux store로 부터 state를 받아온다.
+2. ownProps -> component의 props
