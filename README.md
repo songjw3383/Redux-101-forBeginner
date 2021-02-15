@@ -152,3 +152,39 @@ ReactDOM.render(
      document.getElementById("root")
 );
 ```
+* Connect()
+- components들을 store에 연결시켜주는 기능을 수행
+> import { connect } from "react-redux";
+- 2개의 인자를 받는다. -> state나 dispatch (밑에 mapStateToProps 와 mapDispatchToProps 가 해당, 혹시나 첫번째 인자가 불필요할 경우 null 이라 써줘도 됨)
+> getState는 state를 전달해줬고, dispatch는 store 혹은 reducer에 메세지를 전달해주는 기능을 했었다.
+
+* mapStateToProps() 함수로 Store의 state를 Home에다 가져오게 한다
+1. state -> Redux store로 부터 state를 받아온다.
+2. ownProps -> component의 props
+
+* mapDispatchToProps
+- mapDispatchToProps는 connect의 두번째 인자에 해당.(mapStateToProps 가 첫번째 인자에해당)
+- 인자로는 dispatch(=store.dispatch()), ownProps 를 갖는다.
+- addToDo에 대한 함수를 만들고 props로 지정 (text를 required한다)
+
+* ToDo.js
+- mapStateToProps 에서 받아온 toDo props 를 Home.js에서 렌더링하였다.
+- delete기능 : ToDo 를 지우기 위해선 id가 필요 
+```
+function mapDispatchToProps(dispatch, ownProps){
+
+}
+
+export default connect(null,mapDispatchToProps)(ToDo);
+```
+> 여기서 두번째인자인 ownProps에 우리가 원하는 내용과 ID 가 포함되어있다.
+- onBtnClick 을 만들어 ownProps의 id를 가지고 delete 기능을 구현하였다.
+```
+onBtnClick: () => dispatch(actionCreators.deleteToDo(ownProps.id))
+```
+
+* Detail.js
+- 기본적으로 ToDo에 링크를 걸어 Detail 페이지로 이동하게 한다.
+- mapStateToProps() 의 ownProps로 부터 id 값을 얻어온다
+- 그리고 state.find() 를 사용하여 toDo의 id 와 param의 id가 같은 것을 찾게 한다.
+> .find()는 testing function에 만족하는 첫번째 요소를 반환한다.
