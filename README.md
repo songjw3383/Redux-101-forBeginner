@@ -188,3 +188,94 @@ onBtnClick: () => dispatch(actionCreators.deleteToDo(ownProps.id))
 - mapStateToProps() 의 ownProps로 부터 id 값을 얻어온다
 - 그리고 state.find() 를 사용하여 toDo의 id 와 param의 id가 같은 것을 찾게 한다.
 > .find()는 testing function에 만족하는 첫번째 요소를 반환한다.
+
+### 4. REDUX TOOLKIT
+- Redux 문제점? -> 반복되는 많은 코드양 -> Redux toolkit으로 해결
+> 설치 : yarn add @reduxjs/toolkit
+
+#### How to use Redux toolkit
+1. createAction
+> import { createAction } from "@reduxjs/toolkit";
+- 여기선 addToDo 와 deleteToDo 를 교체하였다.
+- 또한 action은 이제 함수인 **createAction** 으로 만들어지므로, action은 type과 **payload(=text)** 를 갖는다. ( delete 에서의 id 또한 payload로 교체됨)
+> toolkit에선 text대신 payload를 갖는다
+```
+<before>
+const addToDo = (text) => {
+    return {
+        type:ADD,
+        text
+    };
+}
+
+const deleteToDo = id => {
+    return {
+        type: DELETE,
+        id : parseInt(id)
+    }
+}
+
+<after>
+const addToDo = createAction("ADD");
+```
+
+2. createReducer
+- 첫번째 인자는 [] 이다.
+> toDo를 push 해주기 위해서 빈 배열로 초기상태를 시켜주었다.
+
+- createReducer은 state를 mutate 하기 쉽게 만들어준다. (전에는 새로운 state를 만들어서 mutate 해주었다.)
+** 2 options**
+1.) 새로운 state를 리턴하는 방법 (전에 쓰던 방법)
+2.) state를 mutate하는 방법 ( 새로운 방법 )
+* 기본적으로 state를 mutate를 하게되면 반환할 필요가 없어지고, state를 mutate하지 않으면 새로운 state를 반환해야한다.
+
+- 여기서 .push는 state를 mutate 하기 때문에 return 하지않고, .filter은 state를 mutate 하지 않기 때문에 새로운 array를 리턴하게된다.
+```
+<before>
+const reducer = (state =  [], action ) => {
+    switch (action.type) {
+        case addToDo.type:
+            return [{ text: action.payload, id: Date.now()}, ...state];
+        case deleteToDo.type:
+            return state.filter(toDo => toDo.id !== action.payload);
+        default:
+            return state;
+    }
+    
+<after>
+const reducer = createReducer([],{
+    [addToDo] : (state, action) => {
+        state.push({ text: action.payload, id: Date.now() })
+    },
+    [deleteToDo] : (state, action) =>
+        state.filter(toDo => toDo.id !== action.payload)
+})
+```
+
+3. configureStore
+- configureStore() 은 함수이고, 미들웨어와 함께 store을 생성하게 된다. ( defaults 가 추가 됨)
+- Redux Developer Tools를 함께 사용할 수 있으며, state의 상태를 보다 쉽게 확인할 수 있다.
+```
+const store = configureStore({reducer});
+```
+
+4. createSlice
+- reducer와 actions 도 생성해줌에 따라 코드를 현저히 줄여줄수 있다.
+```
+import { configureStore, createSlice } from "@reduxjs/toolkit";
+
+const toDos = createSlice({
+    name:'toDosReducer',
+    initialState: [],
+    reducers: {
+        add: (state, action) => {
+            state.push({ text: action.payload, id: Date.now() });
+        },
+        remove : (state, action) => state.filter(toDo => toDo.id !== action.payload)
+    }
+})
+
+export const { add, remove } = toDos.actions;
+
+export default configureStore({ reducer: toDos.reducer });
+```
